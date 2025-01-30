@@ -9,7 +9,7 @@ function generate_sts_token {
   local STS_ISSUER="$4"
 
   echo "-----printing sts ta key id---------------------"
-  echo $STS_TA_KEY_ID
+  printf "key=%s" "${STS_TA_KEY_ID}"
 
   HEADER_RAW=$(printf '{"alg":"RS256","typ":"JWT","kid":"%s"}' "$STS_TA_KEY_ID")
   PAYLOAD_RAW=$(printf '{"aud":"https://sts.deliveryhero.io","jti":"%s","exp":%d,"iss":"%s","sub":"%s"}' "$(uuidgen)" $(( $(date +%s) + 600 )) "$STS_TA_CLIENT_ID" "$STS_TA_CLIENT_ID")
