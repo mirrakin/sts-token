@@ -22,6 +22,9 @@ function generate_sts_token {
   key_file=$(mktemp)
   printf "%s" "$STS_TA_PRIVATE_KEY" > "$key_file"
 
+  echo "==== KEY FILE CONTENT ===="
+  cat "$key_file" | sed 's/./& /g'
+
   SIGNATURE=$(printf "%s" "${HEADER_PAYLOAD}" | openssl dgst -sha256 -sign "$key_file" | openssl base64 -A | tr -d '=' | tr '/+' '_-' )
   CLIENT_ASSERTION="${HEADER_PAYLOAD}"."${SIGNATURE}"
 
