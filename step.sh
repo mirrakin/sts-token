@@ -15,7 +15,9 @@ function generate_sts_token {
   printf "key=%s" "${STS_TA_KEY_ID}"
 
   HEADER_RAW=$(printf '{"alg":"RS256","typ":"JWT","kid":"%s"}' "$STS_TA_KEY_ID")
-  PAYLOAD_RAW=$(printf '{"aud":"https://sts.deliveryhero.io","jti":"%s","exp":%d,"iss":"%s","sub":"%s"}' "$(uuidgen)" $(( $(date +%s) + 600 )) "$STS_TA_CLIENT_ID" "$STS_TA_CLIENT_ID")
+#   PAYLOAD_RAW=$(printf '{"aud":"https://sts.deliveryhero.io","jti":"%s","exp":%d,"iss":"%s","sub":"%s"}' "$(uuidgen)" $(( $(date +%s) + 600 )) "$STS_TA_CLIENT_ID" "$STS_TA_CLIENT_ID")
+  PAYLOAD_RAW=$(printf '{"aud":"https://sts.deliveryhero.io","jti":"%s","exp":%d,"iss":"%s","sub":"%s"}' "$(echo $(date +%s%N) | md5sum | cut -c 1-36 | sed 's/\(........\)\(....\)\(....\)\(....\)\(............\)/\1-\2-\3-\4-\5/')" $(( $(date +%s) + 600 )) "$STS_TA_CLIENT_ID" "$STS_TA_CLIENT_ID")
+
 
 
   HEADER=$(printf "%s" "${HEADER_RAW}" | openssl base64 -A | tr -d '=' | tr '/+' '_-' )
