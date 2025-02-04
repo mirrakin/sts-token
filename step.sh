@@ -3,6 +3,9 @@ set -ex
 
 # generating sts token to access the test-data-hub api
 function generate_sts_token {
+
+  sudo apt-get install uuid-runtime
+  
   local STS_TA_KEY_ID="$1"
   local STS_TA_CLIENT_ID="$2"
   local STS_TA_PRIVATE_KEY="$3"
